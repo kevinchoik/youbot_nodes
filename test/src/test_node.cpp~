@@ -1,0 +1,61 @@
+#include <moveit/move_group_interface/move_group.h>
+#include <moveit/planning_scene_interface/planning_scene_interface.h>
+
+#include <moveit_msgs/DisplayRobotState.h>
+#include <moveit_msgs/DisplayTrajectory.h>
+
+#include <moveit_msgs/AttachedCollisionObject.h>
+#include <moveit_msgs/CollisionObject.h>
+
+int main(int argc, char **argv)
+{
+  ros::init(argc, argv, "my_youbot_ik");
+  ros::NodeHandle n;
+  ros::AsyncSpinner spinner(1);
+  spinner.start();
+  // Planning group: youbot
+  static const std::string PLANNING_GROUP = "arm_1";
+  // Define planning group
+  moveit::planning_interface::MoveGroup move_group(PLANNING_GROUP);
+  // Define planning scene
+  moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
+  // Define raw pointer for planning group
+  const robot_state::JointModelGroup* joint_model_group = move_group.getCurrentState()->getJointModelGroup(PLANNING_GROUP);
+  while (ros::ok()) {
+    /*
+    // Planning to an inputted joint-space
+    std::vector<double> joint_group_positions;
+    // Reading joint-space input from console
+    std::cout << "> ";
+    double jointPos;
+    for (int i = 0; i < 5; i++) {
+      std::cin >> jointPos;
+      joint_group_positions.push_back(jointPos);
+    }
+    move_group.setJointValueTarget(joint_group_positions);
+    // Calling the planner
+    moveit::planning_interface::MoveGroup::Plan my_plan;
+    bool success = (move_group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+    ROS_INFO_NAMED("tutorial", "Visualizing pose goal %s", success ? "" : "FAILED");
+    move_group.move();
+    */
+    
+    /*
+    // Returning current pose (position & orientation)
+    std::cout << "> ";
+    std::string givePos;
+    std::cin >> givePos;
+    if (givePos == "y") {
+      geometry_msgs::Pose currPose = move_group.getCurrentPose().pose;
+      ROS_INFO_STREAM_NAMED("current_pose", "Position (x, y, z): " << currPose.position.x << ", " << currPose.position.y << ", " << currPose.position.z << "\nOrientation (x, y, z, w): " << currPose.orientation.x << ", " << currPose.orientation.y << ", " << currPose.orientation.z << ", " << currPose.orientation.w);
+    }
+    */
+    // Returning joint-space of target
+    std::cout << "> ";
+    std::string giveJnt;
+    std::cin >> giveJnt;
+    if (giveJnt == "y") {
+      ROS_INFO_STREAM_NAMED("target_joint", "Joint 5: " << *(move_group.getJointValueTarget().getJointPositions("arm_joint_5")));
+    }
+  }
+}
