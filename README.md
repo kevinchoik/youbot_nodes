@@ -17,7 +17,7 @@ A node that introduces an object to the planning scene, picks up an object, or p
 
 Currently, valid inputs include:
 
- * `add name`: Introduces a box to the planning scene. Once called, subsequent inputs will be prompted for the dimension and pose of the box. Dimension should be inputted in the format `x y z`, and pose should be inputted in the format `x y z r p y` or `x1 y1 z1 x2 y2 z2 w2`, explained above.
+ * `add name`: Introduces a box with id `name` to the planning scene. Once called, subsequent inputs will be prompted for the dimension and pose of the box. Dimension should be inputted in the format `x y z`, and pose should be inputted in the format `x y z r p y` or `x1 y1 z1 x2 y2 z2 w2`, explained above.
 
 ### my_hello_world
 
@@ -41,10 +41,13 @@ A node that has multiple miscellaneous methods. Make sure the correct planning g
 
 These nodes require several projects to work properly:
 
-* [MoveIt!](http://moveit.ros.org/install/source/)
-* [youbot-manipulation](https://github.com/svenschneider/youbot-manipulation) (branch: indigo)
-* [youbot_driver_ros_interface](https://github.com/youbot/youbot_driver_ros_interface) (branch: indigo-devel)
-* [youbot_description](https://github.com/youbot/youbot_description) (branch: indigo-devel)
+ * [MoveIt!](http://moveit.ros.org/install/source/)
+ * [youbot-manipulation](https://github.com/svenschneider/youbot-manipulation) (branch: indigo)
+ * [youbot_description](https://github.com/youbot/youbot_description) (branch: indigo-devel)
+
+Additionally, when running on a real youBot along with simulation:
+
+ * [youbot_driver_ros_interface](https://github.com/youbot/youbot_driver_ros_interface) (branch: indigo-devel)
 
 # Installation
 
@@ -63,7 +66,11 @@ Always remember to source `setup.bash` of your workspace. It is convenient if th
 
 # Running
 
-In one terminal window, load a world in RViz that contains at least the youBot. An empty world with just the youBot can be launched with:
+If running on the actual youBot, launch the ROS wrapper for the desired configuration of the youBot (in this example, I use the single arm, no base version):
+
+`roslaunch youbot_driver_ros_interface youbot_driver_arm_only.launch`
+
+Regardless of running on the actual youBot or just in simulation, a simulated youBot is required. In one terminal window, load a world in RViz that contains at least the youBot. An empty world with just the youBot can be launched with:
 
 `roslaunch youbot_moveit demo.launch`
 
@@ -74,7 +81,7 @@ Note that the `demo.launch` file from the `youbot-manipulation` package spawns b
 
 Alternatively, copy the five files in `arm_only_files` from this repo (`youbot_nodes`) accordingly. The folder structure should match that of `youbot-manipulation`, so simply merging the two folders should suffice. Then, launch:
 
-`roslaunch youbot_arm_only.launch`
+`roslaunch youbot_moveit youbot_arm_only.launch`
 
 When RViz successfully loads the world, in one terminal window per node, run one or several of:
 
